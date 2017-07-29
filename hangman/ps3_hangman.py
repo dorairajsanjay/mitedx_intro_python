@@ -136,72 +136,58 @@ def hangman(secretWord):
     #  letters the secretWord contains.
     
     lettersGuessed = []
-    print("Welcome to Hangman!\n")
+    print("Welcome to the game Hangman!")
     
     max_guesses = 8
     incorrectGuesses = 0
 
-    print("Your Word: ",getGuessedWord(secretWord,lettersGuessed))
-    print("Number of letters:",len(secretWord))
-    print("Max Guesses:",max_guesses)
-    print("")
+    print("I am thinking of a word that is " + str(len(secretWord)) + " long")
     
     # iterate through the number of guesses
     correct = False
     while(True):
+        
+        print("-----------")
+        
+        print("You have " + str(max_guesses - incorrectGuesses) + " guesses left")
+        print("Available Letters: " + getAvailableLetters(lettersGuessed))
 
         # Ask the user to supply one guess (i.e. letter) per round.
-        while(True):
-            guess = raw_input("Guess a letter:").lower()
-            if guess not in lettersGuessed:
-                break
-            else:
-                print("Letter already guessed...please try again...")
+        guess = input("Please guess a letter:").lower()
+        if guess in lettersGuessed:
+            print("Oops! You've already guessed that letter:" + getGuessedWord(secretWord,lettersGuessed))
+            continue
 
         # The user should receive feedback immediately after each guess 
         # about whether their guess appears in the computers word.
+        
+        # After each round, you should also display to the user the 
+        # partially guessed word so far, as well as letters that the 
+        # user has not yet guessed.
         
         # update list of letters guessed
         lettersGuessed.append(guess)
         
         # check if letter is in secret word
         if isLetterInSecretWord(secretWord,guess) == True:
-            print("Nice Guess!")
+            print("Good guess: " + getGuessedWord(secretWord,lettersGuessed))
         else:
+            print("Oops! That letter is not in my word:" + getGuessedWord(secretWord,lettersGuessed))
             incorrectGuesses += 1
             if (incorrectGuesses == 8):
                 break
-            else:
-                print("Ooops...Try Again!")
-            
+  
         # did the user win
         if isWordGuessed(secretWord,lettersGuessed):
             correct = True
             break
-            
-        # print remaining letters
-        print("Letters guessed:","".join(lettersGuessed))
-        print("Available Letters:",getAvailableLetters(lettersGuessed))
-        print("Number of incorrect guesses",incorrectGuesses)
-        print("Tries remaining:", max_guesses - incorrectGuesses)
-
-        print("")
-
-        print("Your progress so far:",getGuessedWord(secretWord,lettersGuessed))
-        print("")
-        
-        # After each round, you should also display to the user the 
-        # partially guessed word so far, as well as letters that the 
-        # user has not yet guessed.
-
-    if correct == True:
-        print("You did it. Congratulations!!!!\n")
-    else:
-        print("Sorry...You have exceeded maximum tries...")
-
-    print("The correct word is",secretWord)
-    print("")
     
+    # outside the While loop
+    print("-----------")
+    if correct == True:
+        print("Congratulations, you won!")
+    else:
+        print("Sorry, you ran out of guesses. The word was " + secretWord + ".")
 
 # When you've completed your hangman function, uncomment these two lines
 # and run this file to test! (hint: you might want to pick your own
